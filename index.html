@@ -1,0 +1,502 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Chơi Hụi tình nghĩa Đoàn Gia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#E9F8F5; --bg2:#FFF5EC;
+    --teal:#2BB3A6; --teal-d:#15877B; --teal-dd:#0E5F57;
+    --ink:#16393B; --muted:#6F8D8F; --line:#DDEFEC;
+    --amber:#E9A23B; --amber-bg:#FFF4E0;
+    --rose-bg:#FDECEC; --rose:#B43E43;
+    --mint-bg:#E3F6F2;
+    --shadow:0 10px 30px -14px rgba(21,135,123,.28);
+  }
+  *{box-sizing:border-box}
+  body{
+    margin:0; min-height:100vh; color:var(--ink);
+    font-family:'Be Vietnam Pro',system-ui,-apple-system,'Segoe UI',sans-serif; font-size:15px;
+    background:radial-gradient(120% 60% at 100% 0%,#FFE9DA 0%,rgba(255,233,218,0) 60%),
+               radial-gradient(90% 50% at 0% 0%,#D9F5EF 0%,rgba(217,245,239,0) 70%),
+               linear-gradient(180deg,var(--bg1) 0%,#fff 50%,var(--bg2) 100%) fixed;
+  }
+  button,input,select{font:inherit}
+  .app{max-width:1040px;margin:0 auto;padding:20px 16px 120px}
+
+  /* Header */
+  .top{display:flex;align-items:center;gap:12px;margin-bottom:18px}
+  .logo{width:48px;height:48px;border-radius:16px;flex:none;display:grid;place-items:center;
+        background:linear-gradient(135deg,#46CBBD,#15877B);box-shadow:0 10px 22px -10px rgba(21,135,123,.7)}
+  h1{margin:0;font-size:20px;font-weight:800;letter-spacing:-.2px;line-height:1.2}
+  .sub{font-size:13px;color:var(--muted);margin-top:3px}
+
+  /* Cards */
+  .card{background:#fff;border-radius:22px;padding:18px;box-shadow:var(--shadow);border:1px solid rgba(255,255,255,.8)}
+  .ch{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+  .ch h3{margin:0;font-size:16px;font-weight:800}
+  .lbl{font-size:12px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.6px;margin:16px 0 8px}
+  .muted{color:var(--muted);font-size:14px;margin:0}
+
+  /* Hero */
+  .hero{position:relative;overflow:hidden;color:#fff;border-radius:28px;padding:22px;
+        background:linear-gradient(135deg,#46CBBD 0%,#15877B 100%);box-shadow:0 22px 44px -20px rgba(21,135,123,.7)}
+  .hero::before{content:'';position:absolute;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.12);right:-80px;top:-100px}
+  .hero::after{content:'';position:absolute;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,.08);left:-50px;bottom:-70px}
+  .hero-row{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:center;gap:12px}
+  .eyebrow{font-size:13px;opacity:.9;font-weight:600}
+  .hero-title{font-size:30px;font-weight:800;letter-spacing:-.5px;margin:4px 0 2px}
+  .hero-sub{font-size:14px;opacity:.95}
+  .hero-foot{position:relative;z-index:1;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-top:16px;
+             padding-top:14px;border-top:1px solid rgba(255,255,255,.25);font-size:13px}
+
+  /* Stats */
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin:16px 0}
+  @media(min-width:800px){.stats{grid-template-columns:repeat(4,1fr)}}
+  .stat{background:#fff;border-radius:20px;padding:16px;box-shadow:var(--shadow)}
+  .stat .ico{width:38px;height:38px;border-radius:13px;display:grid;place-items:center;margin-bottom:12px}
+  .ico.teal{background:#E2F6F3;color:var(--teal-d)}
+  .ico.amber{background:var(--amber-bg);color:#9A6100}
+  .stat .l{font-size:12.5px;color:var(--muted);font-weight:600}
+  .stat .v{font-size:19px;font-weight:800;margin-top:2px}
+  .stat .rs{font-size:12px;color:var(--muted);margin-top:2px}
+
+  /* Layout */
+  .split{display:grid;gap:16px}
+  @media(min-width:860px){.split{grid-template-columns:1fr 1fr}}
+
+  /* Chips & pills */
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip{display:inline-flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;font-size:13px;font-weight:600;background:var(--mint-bg);color:var(--teal-dd)}
+  .chip.warn{background:var(--amber-bg);color:#9A6100}
+  .pill{display:inline-flex;align-items:center;padding:5px 11px;border-radius:999px;font-size:12px;font-weight:700;background:var(--mint-bg);color:var(--teal-dd);white-space:nowrap}
+  .pill.warn{background:var(--amber-bg);color:#9A6100}
+  .pill.mute{background:#EEF2F2;color:var(--muted)}
+
+  /* Forms */
+  .form{display:grid;gap:12px}
+  .field{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted);font-weight:600}
+  input,select{width:100%;font-size:15px;color:var(--ink);padding:11px 13px;border:1.5px solid var(--line);border-radius:14px;background:#FBFEFD;outline:none;min-width:0}
+  input:focus,select:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(43,179,166,.15)}
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .inline{display:flex;gap:8px}
+  .inline input{flex:1}
+  .inline select{width:104px;flex:none}
+  .seg{display:flex;background:#EEF6F5;border-radius:14px;padding:4px;gap:4px}
+  .seg button{flex:1;border:0;background:none;padding:9px 8px;border-radius:11px;font-weight:600;color:var(--muted);cursor:pointer}
+  .seg button.on{background:#fff;color:var(--teal-d);box-shadow:0 2px 8px rgba(0,0,0,.08)}
+  .note{font-size:13px;color:var(--muted);background:#F3FAF8;border-radius:14px;padding:12px 14px;line-height:1.5}
+  .note b{color:var(--teal-dd)}
+  @media(min-width:700px){
+    .grid3{grid-template-columns:1fr 1fr 1fr auto;align-items:end}
+    .grid2{grid-template-columns:1fr 1fr auto;align-items:end}
+  }
+
+  /* Buttons */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:0;cursor:pointer;
+       background:linear-gradient(135deg,#3CC5B7,#15877B);color:#fff;border-radius:14px;padding:12px 18px;font-weight:700;
+       box-shadow:0 10px 20px -10px rgba(21,135,123,.7);white-space:nowrap}
+  .btn.ghost{background:#EEF8F6;color:var(--teal-d);box-shadow:none}
+  .btn.sm{padding:8px 12px;font-size:13px;border-radius:12px}
+  .icon-btn{width:34px;height:34px;border-radius:11px;border:0;cursor:pointer;flex:none;display:grid;place-items:center;background:var(--rose-bg);color:var(--rose)}
+
+  /* Schedule */
+  .list{padding:4px 18px}
+  .row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+  .row:last-child{border-bottom:0}
+  .kn{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;font-weight:800;background:#EEF8F6;color:var(--teal-d);flex:none}
+  .row.done .kn{background:linear-gradient(135deg,#46CBBD,#15877B);color:#fff}
+  .row.next .kn{background:var(--amber-bg);color:#9A6100}
+  .grow{flex:1;min-width:0}
+  .rt{font-weight:700;font-size:15px}
+  .rs{font-size:13px;color:var(--muted)}
+
+  /* Players */
+  .pgrid{display:grid;gap:14px;grid-template-columns:1fr}
+  @media(min-width:640px){.pgrid{grid-template-columns:1fr 1fr}}
+  @media(min-width:980px){.pgrid{grid-template-columns:1fr 1fr 1fr}}
+  .ph{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+  .avatar{width:46px;height:46px;border-radius:16px;flex:none;display:grid;place-items:center;font-weight:800;font-size:18px;color:#fff;
+          background:linear-gradient(135deg,#7ED8CC,#2BB3A6)}
+  .pf{display:flex;justify-content:space-between;align-items:center;margin-top:14px;padding-top:12px;border-top:1px solid var(--line);font-size:14px}
+  .pf b{color:var(--teal-dd)}
+  .pcard .chips:empty{display:none}
+
+  /* Bottom navigation */
+  .nav{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;width:min(440px,calc(100% - 32px));z-index:10;
+       display:grid;grid-template-columns:repeat(3,1fr);gap:4px;padding:8px;border-radius:24px;
+       background:rgba(255,255,255,.94);backdrop-filter:blur(12px);box-shadow:0 16px 40px -14px rgba(21,135,123,.4)}
+  .nav button{border:0;background:none;cursor:pointer;color:var(--muted);font-weight:600;font-size:12px;
+              display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 6px;border-radius:17px}
+  .nav button.on{color:var(--teal-d);background:var(--mint-bg)}
+  .foot{text-align:center;color:var(--muted);font-size:12px;margin-top:26px;line-height:1.6}
+  [hidden]{display:none !important}
+</style>
+</head>
+<body>
+<main class="app">
+  <header class="top">
+    <div class="logo" data-icon="coin" data-color="#fff"></div>
+    <div>
+      <h1>Chơi Hụi tình nghĩa Đoàn Gia</h1>
+      <div class="sub" id="sub"></div>
+    </div>
+  </header>
+
+  <section data-view="overview" id="v-overview"></section>
+  <section data-view="schedule" id="v-schedule" hidden></section>
+  <section data-view="players" id="v-players" hidden></section>
+
+  <div class="foot">Dữ liệu được lưu trên trình duyệt này. Mở lại cùng trình duyệt để xem tiếp.</div>
+</main>
+
+<nav class="nav">
+  <button data-act="tab" data-v="overview" class="on"><span data-icon="home"></span>Tổng quan</button>
+  <button data-act="tab" data-v="schedule"><span data-icon="cal"></span>Lịch hốt</button>
+  <button data-act="tab" data-v="players"><span data-icon="users"></span>Người chơi</button>
+</nav>
+
+<script>
+(() => {
+  const KEY = 'choi-hui-doan-gia-v1';
+
+  const DEFAULT_SETTINGS = { amount: 100, currency: 'USD', units: 24, periods: 24, start: '2025-10' };
+
+  const PLAYERS_DEFAULT = [
+    { id: 'dao',   name: 'Đào',   phan: 'Phần 1' },
+    { id: 'trinh', name: 'Trinh', phan: 'Phần 1' },
+    { id: 'liem',  name: 'Liêm',  phan: 'Phần 2' },
+    { id: 'hieu',  name: 'Hiếu',  phan: 'Phần 2' },
+    { id: 'hanh',  name: 'Hạnh',  phan: 'Phần 3' },
+    { id: 'nghia', name: 'Nghĩa', phan: 'Phần 3' },
+    { id: 'thanh', name: 'Thanh', phan: 'Phần 4' },
+    { id: 'dung',  name: 'Dũng',  phan: 'Phần 4' },
+    { id: 'nhan',  name: 'Nhân',  phan: 'Phần 4' }
+  ];
+
+  // Đã hốt: [tháng, người hốt] — kỳ 1 bắt đầu từ 10/2025
+  const HOT_DEFAULT = [
+    ['2025-10', 'nghia'], ['2025-11', 'hanh'], ['2025-12', 'nhan'], ['2026-01', 'liem'],
+    ['2026-02', 'thanh'], ['2026-03', 'thanh'], ['2026-04', 'dung'], ['2026-05', 'hanh'],
+    ['2026-06', 'dung'], ['2026-07', 'nhan'], ['2026-08', 'hanh'], ['2026-09', 'nhan'],
+    ['2026-10', 'dao'], ['2026-11', 'hieu']
+  ];
+
+  const freshData = () => ({
+    settings: { ...DEFAULT_SETTINGS },
+    players: PLAYERS_DEFAULT.map(p => ({ ...p })),
+    hots: HOT_DEFAULT.map(([month, playerId]) => ({ month, playerId, amount: null }))
+  });
+
+  function load() {
+    try {
+      const d = JSON.parse(localStorage.getItem(KEY) || 'null');
+      if (d && d.settings && Array.isArray(d.players) && Array.isArray(d.hots)) return d;
+    } catch (e) { /* localStorage không khả dụng: dùng dữ liệu mẫu */ }
+    return freshData();
+  }
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* bỏ qua */ }
+  }
+
+  let state = load();
+  let currentTab = 'overview';
+
+  /* ---------- Helpers ---------- */
+  const $ = s => document.querySelector(s);
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const S = () => state.settings;
+
+  const money = n => new Intl.NumberFormat(S().currency === 'VND' ? 'vi-VN' : 'en-US',
+    { style: 'currency', currency: S().currency, maximumFractionDigits: 0 }).format(n);
+
+  const addMonths = (ym, i) => {
+    const [y, m] = ym.split('-').map(Number);
+    const d = new Date(y, m - 1 + i, 1);
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`;
+  };
+  const mLabel = ym => { const [y, m] = ym.split('-'); return `${Number(m)}/${y}`; };
+  const pName = id => state.players.find(p => p.id === id)?.name ?? 'Không rõ';
+
+  const potOf = () => S().amount * S().units;
+  const hotAmount = h => h.amount ?? potOf();
+
+  function stats() {
+    const kys = Array.from({ length: S().periods }, (_, i) => {
+      const month = addMonths(S().start, i);
+      return { ky: i + 1, month, hot: state.hots.find(h => h.month === month) || null };
+    });
+    const done = kys.filter(k => k.hot);
+    const pot = potOf();
+    return {
+      kys, done, pot,
+      total: kys.length,
+      doneN: done.length,
+      remainN: kys.length - done.length,
+      next: kys.find(k => !k.hot) || null,
+      received: done.reduce((s, k) => s + hotAmount(k.hot), 0),
+      remainValue: (kys.length - done.length) * pot,
+      pct: kys.length ? done.length / kys.length : 0,
+      last: done.length ? done[done.length - 1].month : null
+    };
+  }
+  const playerHots = (id, st = stats()) => st.done.filter(k => k.hot.playerId === id);
+
+  const ICONS = {
+    home:  '<path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V20h14V9.5"/>',
+    cal:   '<rect x="3" y="4.5" width="18" height="16.5" rx="3"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/>',
+    users: '<circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.4 3.2-5.5 6.5-5.5s5.9 2.1 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18.5 14.8c1.7.8 2.7 2.7 3 5.2"/>',
+    coin:  '<circle cx="12" cy="12" r="8.5"/><path d="M12 7.5v9M9.5 9.5h4a1.5 1.5 0 0 1 0 3h-3a1.5 1.5 0 0 0 0 3h4"/>',
+    check: '<path d="M5 12.5l4.5 4.5L19 7.5"/>',
+    clock: '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+    wallet:'<rect x="3" y="6" width="18" height="13" rx="3"/><path d="M3 9.5h15M16 14h2.5"/>',
+    plus:  '<path d="M12 5v14M5 12h14"/>',
+    trash: '<path d="M4 7h16M9 7V4.5h6V7M6.5 7l1 13h9l1-13"/>'
+  };
+  const svg = (name, size = 20) =>
+    `<svg viewBox="0 0 24 24" width="${size}" height="${size}" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[name]}</svg>`;
+
+  const ring = (pct, size, stroke, color, track) => {
+    const r = (size - stroke) / 2, c = 2 * Math.PI * r, h = size / 2;
+    return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" style="flex:none">
+      <circle cx="${h}" cy="${h}" r="${r}" fill="none" stroke="${track}" stroke-width="${stroke}"/>
+      <circle cx="${h}" cy="${h}" r="${r}" fill="none" stroke="${color}" stroke-width="${stroke}" stroke-linecap="round"
+        stroke-dasharray="${c}" stroke-dashoffset="${c * (1 - pct)}" transform="rotate(-90 ${h} ${h})"/>
+      <text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" font-size="${size * 0.22}" font-weight="800" fill="${color}">${Math.round(pct * 100)}%</text>
+    </svg>`;
+  };
+
+  const stat = (icon, label, value, sub, tone) => `
+    <div class="stat">
+      <div class="ico ${tone}">${svg(icon, 20)}</div>
+      <div class="l">${label}</div>
+      <div class="v">${value}</div>
+      ${sub ? `<div class="rs">${sub}</div>` : ''}
+    </div>`;
+
+  /* ---------- Render ---------- */
+  function renderHeader(st) {
+    $('#sub').textContent = `${st.doneN}/${st.total} kỳ đã hốt · cập nhật đến ${st.last ? mLabel(st.last) : 'chưa có'}`;
+  }
+
+  function renderOverview(st) {
+    const s = S();
+    const next = st.next;
+    const notYet = state.players.filter(p => !playerHots(p.id, st).length);
+    const hadHot = state.players.filter(p => playerHots(p.id, st).length);
+
+    $('#v-overview').innerHTML = `
+      <div class="hero">
+        <div class="hero-row">
+          <div>
+            <div class="eyebrow">${next ? 'Kỳ hốt tiếp theo' : 'Hoàn tất'}</div>
+            <div class="hero-title">${next ? mLabel(next.month) : 'Đã hốt xong'}</div>
+            <div class="hero-sub">${next ? `Kỳ ${next.ky}/${st.total} · Tiền hốt ${money(st.pot)}` : `Tổng đã nhận ${money(st.received)}`}</div>
+          </div>
+          ${ring(st.pct, 104, 10, '#fff', 'rgba(255,255,255,.28)')}
+        </div>
+        <div class="hero-foot">
+          <span>Đã hốt <b>${st.doneN}</b>/${st.total} kỳ</span>
+          <span>Còn lại <b>${st.remainN}</b> lần</span>
+        </div>
+      </div>
+
+      <div class="stats">
+        ${stat('check', 'Đã hốt', `${st.doneN} lần`, `${notYet.length} người chưa hốt`, 'teal')}
+        ${stat('clock', 'Còn lại', `${st.remainN} lần`, `Tổng ${money(st.remainValue)}`, 'amber')}
+        ${stat('coin', 'Hốt được mỗi lần', money(st.pot), `${money(s.amount)} × ${s.units} phần`, 'teal')}
+        ${stat('wallet', 'Đã nhận', money(st.received), `Trung bình ${money(st.doneN ? st.received / st.doneN : 0)}/lần`, 'teal')}
+      </div>
+
+      <div class="split">
+        <div class="card">
+          <div class="ch"><h3>Ai còn lại</h3><span class="pill warn">${notYet.length} người chưa hốt</span></div>
+          <div class="lbl">Chưa hốt lần nào</div>
+          <div class="chips">
+            ${notYet.map(p => `<span class="chip warn">${esc(p.name)}${p.phan ? ' · ' + esc(p.phan) : ''}</span>`).join('') || '<span class="muted">Mọi người đã hốt</span>'}
+          </div>
+          <div class="lbl">Đã hốt</div>
+          <div class="chips">
+            ${hadHot.map(p => `<span class="chip">${esc(p.name)} ×${playerHots(p.id, st).length}</span>`).join('') || '<span class="muted">Chưa ai hốt</span>'}
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="ch"><h3>Cài đặt hụi</h3></div>
+          <div class="form">
+            <label class="field">Số tiền mỗi chân hụi
+              <div class="inline">
+                <input type="number" min="0" step="1" data-set="amount" value="${s.amount}">
+                <select data-set="currency">
+                  <option value="USD" ${s.currency === 'USD' ? 'selected' : ''}>USD</option>
+                  <option value="VND" ${s.currency === 'VND' ? 'selected' : ''}>VND</option>
+                </select>
+              </div>
+            </label>
+            <div class="two">
+              <label class="field">Số phần hụi<input type="number" min="1" data-set="units" value="${s.units}"></label>
+              <label class="field">Tổng số kỳ hốt<input type="number" min="1" data-set="periods" value="${s.periods}"></label>
+            </div>
+            <label class="field">Tháng của kỳ 1<input type="month" data-set="start" value="${s.start}"></label>
+            <div class="note">Tiền hốt mỗi lần = tiền mỗi chân × số phần hụi = <b>${money(st.pot)}</b></div>
+            <div><button class="btn ghost sm" data-act="reset">Khôi phục dữ liệu mẫu</button></div>
+          </div>
+        </div>
+      </div>`;
+  }
+
+  function renderSchedule(st) {
+    const free = st.kys.filter(k => !k.hot);
+    const opts = free.map(k => `<option value="${k.month}">Kỳ ${k.ky} · ${mLabel(k.month)}</option>`).join('');
+    const pOpts = state.players.map(p => `<option value="${esc(p.id)}">${esc(p.name)}</option>`).join('');
+
+    const rows = st.kys.map(k => {
+      const isNext = st.next && st.next.ky === k.ky;
+      const cls = k.hot ? 'done' : (isNext ? 'next' : '');
+      const status = k.hot ? '<span class="pill">Đã hốt</span>'
+        : (isNext ? '<span class="pill warn">Sắp tới</span>' : '<span class="pill mute">Chưa tới</span>');
+      return `
+        <div class="row ${cls}">
+          <div class="kn">${k.ky}</div>
+          <div class="grow">
+            <div class="rt">${k.hot ? esc(pName(k.hot.playerId)) : 'Chưa xác định'}</div>
+            <div class="rs">${mLabel(k.month)} · ${money(k.hot ? hotAmount(k.hot) : st.pot)}</div>
+          </div>
+          ${status}
+          ${k.hot ? `<button class="icon-btn" data-act="delHot" data-m="${k.month}" title="Xóa lần hốt">${svg('trash', 16)}</button>` : ''}
+        </div>`;
+    }).join('');
+
+    $('#v-schedule').innerHTML = `
+      <div class="card">
+        <div class="ch"><h3>Ghi nhận lần hốt</h3><span class="pill">Còn ${free.length} kỳ</span></div>
+        ${free.length ? `
+        <div class="form grid3">
+          <label class="field">Kỳ<select id="f-ky">${opts}</select></label>
+          <label class="field">Người hốt<select id="f-who">${pOpts}</select></label>
+          <label class="field">Số tiền hốt<input id="f-amt" type="number" min="0" step="1" value="${st.pot}"></label>
+          <button class="btn" data-act="addHot">${svg('plus', 18)} Ghi nhận</button>
+        </div>` : '<p class="muted">Đã đủ tất cả kỳ hốt.</p>'}
+      </div>
+      <div class="card list" style="margin-top:16px">${rows}</div>`;
+  }
+
+  function renderPlayers(st) {
+    const cards = state.players.map(p => {
+      const hs = playerHots(p.id, st);
+      const total = hs.reduce((s, k) => s + hotAmount(k.hot), 0);
+      return `
+        <div class="card pcard">
+          <div class="ph">
+            <div class="avatar">${esc(p.name.trim().charAt(0).toUpperCase())}</div>
+            <div class="grow">
+              <div class="rt">${esc(p.name)}</div>
+              <div class="rs">${esc(p.phan || 'Chưa phân nhóm')}</div>
+            </div>
+            ${hs.length ? `<span class="pill">Đã hốt ×${hs.length}</span>` : '<span class="pill warn">Chưa hốt</span>'}
+          </div>
+          <div class="chips">
+            ${hs.map(k => `<span class="chip">Kỳ ${k.ky} · ${mLabel(k.month)}</span>`).join('')}
+          </div>
+          <div class="pf">
+            <span>Đã nhận <b>${money(total)}</b></span>
+            ${hs.length ? '' : `<button class="icon-btn" data-act="delPlayer" data-id="${esc(p.id)}" title="Xóa người chơi">${svg('trash', 16)}</button>`}
+          </div>
+        </div>`;
+    }).join('');
+
+    $('#v-players').innerHTML = `
+      <div class="pgrid">${cards}</div>
+      <div class="card" style="margin-top:16px">
+        <div class="ch"><h3>Thêm người chơi</h3></div>
+        <div class="form grid2">
+          <label class="field">Tên<input id="p-name" placeholder="Nhập tên"></label>
+          <label class="field">Phần / nhóm<input id="p-phan" placeholder="VD: Phần 5"></label>
+          <button class="btn" data-act="addPlayer">${svg('plus', 18)} Thêm</button>
+        </div>
+      </div>`;
+  }
+
+  function renderAll() {
+    const st = stats();
+    renderHeader(st);
+    renderOverview(st);
+    renderSchedule(st);
+    renderPlayers(st);
+  }
+
+  /* ---------- Actions ---------- */
+  const ACT = {
+    tab(el) {
+      currentTab = el.dataset.v;
+      document.querySelectorAll('[data-view]').forEach(sec => { sec.hidden = sec.dataset.view !== currentTab; });
+      document.querySelectorAll('.nav button').forEach(b => b.classList.toggle('on', b.dataset.v === currentTab));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    },
+    addHot() {
+      const month = $('#f-ky')?.value, playerId = $('#f-who')?.value, amt = Number($('#f-amt').value);
+      if (!month || !playerId) return;
+      if (!(amt >= 0)) return alert('Số tiền hốt không hợp lệ.');
+      state.hots.push({ month, playerId, amount: amt === potOf() ? null : amt });
+      save(); renderAll();
+    },
+    delHot(el) {
+      if (!confirm(`Xóa lần hốt của kỳ ${mLabel(el.dataset.m)}?`)) return;
+      state.hots = state.hots.filter(h => h.month !== el.dataset.m);
+      save(); renderAll();
+    },
+    addPlayer() {
+      const name = $('#p-name').value.trim();
+      const phan = $('#p-phan').value.trim();
+      if (!name) return alert('Vui lòng nhập tên người chơi.');
+      state.players.push({ id: 'p' + Date.now(), name, phan });
+      save(); renderAll();
+    },
+    delPlayer(el) {
+      const p = state.players.find(x => x.id === el.dataset.id);
+      if (!p) return;
+      if (!confirm(`Xóa ${p.name} khỏi danh sách?`)) return;
+      state.players = state.players.filter(x => x.id !== p.id);
+      save(); renderAll();
+    },
+    reset() {
+      if (!confirm('Khôi phục lại dữ liệu mẫu? Mọi thay đổi hiện tại sẽ mất.')) return;
+      state = freshData();
+      save(); renderAll();
+    }
+  };
+
+  document.addEventListener('click', e => {
+    const el = e.target.closest('[data-act]');
+    if (el && ACT[el.dataset.act]) ACT[el.dataset.act](el);
+  });
+
+  document.addEventListener('change', e => {
+    const el = e.target.closest('[data-set]');
+    if (!el) return;
+    const k = el.dataset.set;
+    let v = el.value;
+    if (k === 'amount' || k === 'units' || k === 'periods') {
+      v = Number(v);
+      if (!(v >= 0) || (k !== 'amount' && v < 1)) return;
+    }
+    if (k === 'start' && !v) return;
+    state.settings[k] = v;
+    save(); renderAll();
+  });
+
+  document.querySelectorAll('[data-icon]').forEach(el => {
+    el.innerHTML = svg(el.dataset.icon, el.dataset.icon === 'coin' ? 26 : 22);
+  });
+  // Icon màu trắng cho logo
+  document.querySelector('.logo').style.color = '#fff';
+
+  renderAll();
+  ACT.tab({ dataset: { v: 'overview' } });
+})();
+</script>
+</body>
+</html>
